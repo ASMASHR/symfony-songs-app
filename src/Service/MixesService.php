@@ -1,6 +1,7 @@
 <?php
 namespace App\Service;
 use Psr\Cache\CacheItemInterface;
+use Symfony\Bridge\Twig\Command\DebugCommand;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
@@ -16,14 +17,17 @@ class  MixesService {
         private bool $isDebug,
         //autowire non autowireable services
         #[Autowire(service:'twig.command.debug')]
-        private DebugCmd $twigCmdDebug
+        private DebugCommand $twigDebugCommand,
     ){
     }
     public function getAll()
     {
         return $this->cache->get('mixes_data', function (CacheItemInterface $cacheItem)  {
             $cacheItem->expiresAfter($this->isDebug ? 5 : 60);
-            $response = $this->githubContentClient->request('GET', '/SymfonyCasts/vinyl-mixes/main/mixes.json');
+            $response = $this->githubContentClient->request('GET', '/SymfonyCasts/vinyl-mixes/main/mixes.json', [
+                'headers' => [
+                    'Authorization' => 'Token ghp_foo_bar',
+                ]]);
             return $response->toArray();
         });
     }
