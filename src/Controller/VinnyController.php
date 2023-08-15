@@ -2,9 +2,13 @@
 
 namespace App\Controller;
 
+use App\Service\MixesService;
+use Psr\Cache\CacheItemInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use  Symfony\Contracts\Cache\CacheInterface;
 use function Symfony\Component\String\u;
 
 class VinnyController extends AbstractController
@@ -26,19 +30,43 @@ class VinnyController extends AbstractController
         ['title'=>' new symfony site',
            'tracks'=> $tracks]);
     }
-    #[Route('/browse/{slug}',name:'app_browse')]
-    public function browse(string $slug=null):Response{
-        //$slug=null  to prevent the error of /browse/ return no such url
-        //u() symfony library return an object exemple we need to uppercase title john-dow==> John Dow
-        if($slug===null){
-          $title='All Genres';
-        }
-        else {
-            $title = 'Genre: ' . u(str_replace('-', ' ', $slug))->title(true);
-        }
-$genre=$slug? u(str_replace('-', ' ', $slug))->title(true):null;
-        return  $this->render(
-            ('Vinny/browse.html.twig'),['genre'=>$genre]);
+
+    #[Route('/browse/{slug}', name: 'app_browse')]
+    public function browse(HttpClientInterface $httpClient, CacheInterface $cache, MixesService $mixesService, string $slug = null): Response
+    {
+        $genre = $slug ? u(str_replace('-', ' ', $slug))->title(true) : null;
+        $mixes =$mixesService->getAll();
+
+
+
+        return $this->render('Vinny/browse.html.twig', [
+            'genre' => $genre,
+            'mixes' => $mixes,
+        ]);
+    }
+    private function getMixes(): array
+    {
+        // temporary fake "mixes" data
+        return [
+            [
+                'title' => 'PB & Jams',
+                'trackCount' => 14,
+                'genre' => 'Rock',
+                'createdAt' => new \DateTime('2021-10-02'),
+            ],
+            [
+                'title' => 'Put a Hex on your Ex',
+                'trackCount' => 8,
+                'genre' => 'Heavy Metal',
+                'createdAt' => new \DateTime('2022-04-28'),
+            ],
+            [
+                'title' => 'Spice Grills - Summer Tunes',
+                'trackCount' => 10,
+                'genre' => 'Pop',
+                'createdAt' => new \DateTime('2019-06-20'),
+            ],
+        ];
     }
 
 }
