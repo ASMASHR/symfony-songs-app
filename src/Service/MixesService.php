@@ -26,7 +26,7 @@ class  MixesService {
             $cacheItem->expiresAfter($this->isDebug ? 5 : 60);
             $response = $this->githubContentClient->request('GET', '/SymfonyCasts/vinyl-mixes/main/mixes.json', [
                 'headers' => [
-                    'Authorization' => 'Token ghp_foo_bar',
+                    'Authorization' => 'GITHUB_TOKEN',
                 ]]);
             return $response->toArray();
         });

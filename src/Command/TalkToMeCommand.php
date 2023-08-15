@@ -2,6 +2,7 @@
 
 namespace App\Command;
 
+use App\Service\MixesService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -18,6 +19,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class TalkToMeCommand extends Command
 {
+    public function __construct(private MixesService $mixesService)
+    {
+        parent::__construct();
+    }
+
     protected function configure(): void
     {
         $this
@@ -39,7 +45,13 @@ class TalkToMeCommand extends Command
         }
 
         $io->success($msg);
+        if($io->confirm('Do you want a mix recommendation?'))
+        {
+            $mixes=$this->mixesService->getAll();
+            $mix=$mixes[array_rand($mixes)];
+            $io->note('i recommend the mix: '.$mix['title']);
 
+        }
         return Command::SUCCESS;
     }
 }
