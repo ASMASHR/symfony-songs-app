@@ -2,7 +2,7 @@
 
 namespace App\Command;
 
-use App\Service\MixesService;
+use App\Repository\VinyMixRepository;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -19,7 +19,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 class TalkToMeCommand extends Command
 {
-    public function __construct(private MixesService $mixesService)
+    public function __construct(private VinyMixRepository $mixesService)
     {
         parent::__construct();
     }

@@ -15,6 +15,9 @@
         <li class="d-inline">
             <a class="btn btn-primary btn-sm" href="{{ path('app_browse',{slug:'Heavy-Metal'}) }}">Heavy Metal</a>
         </li>
+        <li class="d-inline">
+            <a class="btn btn-primary btn-sm" href="{{ path('app_browse') }}">All</a>
+        </li>
     </ul>
 
     <div>
@@ -23,13 +26,17 @@
             {% for mix in mixes %}
                 <div class="col col-md-4">
                     <div class="mixed-vinyl-container p-3 text-center">
-                        <img src="https://via.placeholder.com/300" data-src="https://via.placeholder.com/300" alt="Square placeholder img">
-                        <p class="mt-2"><strong>{{ mix.title }}</strong></p>
-                        <span>{{ mix.trackCount }} Tracks</span>
-                        |
-                        <span>{{ mix.genre }}</span>
-                        |
-                        <span>{{ mix.createdAt|ago }}</span>
+                        <a href="{{ path('app_mix_show',{id:mix.id}) }}" class="text-white text-decoration-none" >
+                            <img src="{{ mix.imageUrl(300) }}" alt="mix album photo"/>
+                            <p class="mt-2"><strong>{{ mix.title }}</strong></p>
+                            <span>{{ mix.trackCount }} Tracks</span>
+                            |
+                            <span>{{ mix.genre }}</span>
+                            |
+                            <span>{{ mix.createAt|ago }}</span>
+                            <br>
+                            <span>{{ mix.votesString }} votes </span>
+                        </a>
                     </div>
                 </div>
             {% endfor %}

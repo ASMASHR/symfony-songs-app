@@ -2,7 +2,10 @@
 
 namespace App\Controller;
 
-use App\Service\MixesService;
+use App\Entity\VinyMix;
+use App\Repository\VinyMixRepository;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Psr\Cache\CacheItemInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,13 +35,14 @@ class VinnyController extends AbstractController
     }
 
     #[Route('/browse/{slug}', name: 'app_browse')]
-    public function browse(HttpClientInterface $httpClient, CacheInterface $cache, MixesService $mixesService, string $slug = null): Response
+    public function browse(EntityManagerInterface $entityManagerInterface, HttpClientInterface $httpClient, CacheInterface $cache, VinyMixRepository $mixesService, string $slug = null): Response
     {
         $genre = $slug ? u(str_replace('-', ' ', $slug))->title(true) : null;
-        $mixes =$mixesService->getAll();
-
-
-
+        //$mixes =$mixesService->getAll();
+$mixRep=$entityManagerInterface->getRepository(VinyMix::class);
+//Anyway, VinylMixRepository is actually a service in the container... so we can get it more easily by autowiring it directly. Add a VinylMixRepository $mixRepository argument... and then we don't need this line at all. That is simpler... and it still works!
+$mixes=$mixRep->FindAllMixesByVote($genre);
+//dd($mixes);
         return $this->render('Vinny/browse.html.twig', [
             'genre' => $genre,
             'mixes' => $mixes,
