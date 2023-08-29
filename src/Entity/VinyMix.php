@@ -123,4 +123,10 @@ class VinyMix
         ($this->getId() + 50) % 1000, // number between 0 and 1000, based on the id
         $width);
     }
+    public function upVote(){
+        return $this->votes++;
+    }
+    public function downVote(){
+        return $this->votes--;
+    }
 }
