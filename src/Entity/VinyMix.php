@@ -5,10 +5,13 @@ namespace App\Entity;
 use App\Repository\VinyMixRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity(repositoryClass: VinyMixRepository::class)]
 class VinyMix
 {
+    use TimestampableEntity; //composer require stof/doctrine-extensions-bundle  to add createdAt property & updatedAt field ...  
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -26,14 +29,10 @@ class VinyMix
     #[ORM\Column(length: 255)]
     private ?string $genre = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $createAt=null ;
 
     #[ORM\Column]
     private int $votes = 0;
-    public function __construct(){
-        $this->createAt=new \DateTimeImmutable();
-    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -87,17 +86,6 @@ class VinyMix
         return $this;
     }
 
-    public function getCreateAt(): ?\DateTimeImmutable
-    {
-        return $this->createAt;
-    }
-
-    public function setCreateAt(\DateTimeImmutable $createAt): static
-    {
-        $this->createAt = $createAt;
-
-        return $this;
-    }
 
     public function getVotes(): ?int
     {
