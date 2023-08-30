@@ -48,6 +48,8 @@ $queryBuilder=$mixRep->createOrderdByVotesQueryBuild($genre);
 $adapter=new QueryAdapter($queryBuilder);
 $pagerfanta=Pagerfanta::createForCurrentPageWithMaxPerPage(
     $adapter,$request->query->get('page',1),6
+    // composer require babdev/pagerfanta-bundle:* pagerfanta/doctrine-orm-adapter:* for the pager  
+    //$request->query->get('page',1) to change data when changing the page
 );
 //dd($mixes);
         return $this->render('Vinny/browse.html.twig', [
