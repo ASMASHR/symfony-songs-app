@@ -29,7 +29,7 @@ public function new(EntityManagerInterface $entityManager):Response{
     }
 
 
-    #[Route('/mix/{id}',name:'app_mix_show')]
+    #[Route('/mix/{slug}',name:'app_mix_show')]
     public function show(VinyMix $mix){
        // $mix=$mixRep->findOneBySomeField($id);or
        //$mix=$mixRep->find($id);
@@ -42,6 +42,7 @@ public function new(EntityManagerInterface $entityManager):Response{
     ]);
 
     }
+
     #[Route('/mix/{id}/vote',name:'app_mix_vote',methods:['POST'])]
     public function vote(VinyMix $mix,Request $request,EntityManagerInterface $entityManager){
         //direction default to 'up'
@@ -56,7 +57,7 @@ public function new(EntityManagerInterface $entityManager):Response{
         //Flash messages have a fancy name, but they're a simple idea; Symfony stores flash messages in the user's session. What makes them special is that Symfony will remove the message automatically as soon as we read it. They're like self-destructing messages. Pretty cool.
         $this->addFlash('success','vote counted');
         return $this->redirectToRoute('app_mix_show', [
-            'id' => $mix->getId(),
+            'slug' => $mix->getSlug(),
         ]); 
     }
 }

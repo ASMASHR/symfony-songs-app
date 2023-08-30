@@ -26,7 +26,7 @@
             {% for mix in mixes %}
                 <div class="col col-md-4">
                     <div class="mixed-vinyl-container p-3 text-center">
-                        <a href="{{ path('app_mix_show',{id:mix.id}) }}" class="text-white text-decoration-none" >
+                        <a href="{{ path('app_mix_show',{slug:mix.slug}) }}" class="text-white text-decoration-none" >
                             <img src="{{ mix.imageUrl(300) }}" alt="mix album photo"/>
                             <p class="mt-2"><strong>{{ mix.title }}</strong></p>
                             <span>{{ mix.trackCount }} Tracks</span>

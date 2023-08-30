@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\VinyMixRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation\Slug;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 
 #[ORM\Entity(repositoryClass: VinyMixRepository::class)]
@@ -32,6 +33,11 @@ class VinyMix
 
     #[ORM\Column]
     private int $votes = 0;
+
+    #[ORM\Column(length: 100,unique:true)]
+    //use the title field to generate the slug
+    #[Slug(fields:['title'])]
+    private ?string $slug = null;
 
     public function getId(): ?int
     {
@@ -116,5 +122,17 @@ class VinyMix
     }
     public function downVote(){
         return $this->votes--;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): static
+    {
+        $this->slug = $slug;
+
+        return $this;
     }
 }
