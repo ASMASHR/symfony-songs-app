@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\VinyMix;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,10 +22,8 @@ class VinyMixRepository extends ServiceEntityRepository
         parent::__construct($registry, VinyMix::class);
     }
 
-    /**
-     * @return VinyMix[] Returns an array of VinyMix objects
-     */
-    public function findAllMixesByVote(string $genre=null): array
+  
+    public function createOrderdByVotesQueryBuild(string $genre=null): QueryBuilder
     {
        $queryBuilder= $this->createQueryBuilder('mix')
        ->orderBy('mix.votes','DESC');
@@ -32,8 +31,7 @@ class VinyMixRepository extends ServiceEntityRepository
                 $queryBuilder->andWhere('mix.genre = :val');
                 $queryBuilder->setParameter('val', $genre);
         }
-           return $queryBuilder->getQuery()
-           ->getResult();
+           return $queryBuilder;
         ;
     }
 
